@@ -1,7 +1,7 @@
 import React from "react";
 import "./workers-list-item.css";
 const WorkersListItem = (props) => {
-  let { name, salery, togleWorker, increase, rise, onDelete } = props;
+  let { name, salery, toggleWorker, increase, rise, onDelete } = props;
   let className = "list-group-item d-flex justify-content-between";
   if (increase) {
     className += " increase";
@@ -11,12 +11,12 @@ const WorkersListItem = (props) => {
   }
   return (
     <li className={className}>
-      <span onClick={togleWorker} className='list-group-item-label' data-toggle='rise'>
+      <span onClick={toggleWorker} className='list-group-item-label' data-toggle='rise'>
         {name}
       </span>
       <input type='text' className='list-group-item-input' defaultValue={(salery += "$")} />
       <div className='d-flex justify-content-center align-items-center'>
-        <button onClick={togleWorker} data-toggle='increase' type='button' className='btn-cookie btn-sm '>
+        <button onClick={toggleWorker} data-toggle='increase' type='button' className='btn-cookie btn-sm '>
           <i className='fas fa-cookie' />
         </button>
 
