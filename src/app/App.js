@@ -15,9 +15,10 @@ class App extends Component {
         { name: "Ivanov I.", salery: 1200, increase: true, rise: true, id: uuidv4() },
         { name: "Petrov P.", salery: 1500, increase: false, rise: false, id: uuidv4() },
         { name: "Sidorov R.", salery: 2000, increase: true, rise: false, id: uuidv4() }
-      ]
+      ],
+      item: "",
+      filter: ""
     };
-    this.maxId = 4;
   }
   deleteWorkers = (id) => {
     this.setState(({ data }) => {
@@ -50,7 +51,7 @@ class App extends Component {
     });
   };
 
-  togleWorkers = (id, prop) => {
+  toggleWorkers = (id, prop) => {
     this.setState(({ data }) => ({
       data: data.map((el) => {
         if (el.id === id) {
@@ -60,14 +61,46 @@ class App extends Component {
       })
     }));
   };
+
+  onSearchWorker = (workers, item) => {
+    if (item.length === 0) {
+      return workers;
+    }
+    return workers.filter((el) => {
+      return el.name.indexOf(item) > -1;
+    });
+  };
+
+  onUpdateItem = (item) => {
+    this.setState({ item });
+  };
+
+  filterWorkers = (workers, filter) => {
+    switch (filter) {
+      case "rise":
+        return workers.filter((el) => el.rise);
+
+      case "salery":
+        return workers.filter((el) => el.salery > 1000);
+
+      default:
+        return workers;
+    }
+  };
+   onUpdateFilter = (filter) => {
+    this.setState({ filter });
+  };
+
   render() {
-    const countWorkers = this.state.data.length;
-    const richWorkers = this.state.data.filter((el) => el.increase).length;
+    const { data, item, filter } = this.state;
+    const filterName = this.filterWorkers(this.onSearchWorker(data, item), filter);
+    const countWorkers = data.length;
+    const richWorkers = data.filter((el) => el.increase).length;
     return (
       <div className='wrapper'>
         <AppInfo sum={countWorkers} rich={richWorkers} />
-        <SearchPanel />
-        <WorkersList data={this.state.data} onDelete={this.deleteWorkers} togle={this.togleWorkers} />
+        <SearchPanel serch={this.onUpdateItem}  filter={this.onUpdateFilter} />
+        <WorkersList data={filterName} onDelete={this.deleteWorkers} toggle={this.toggleWorkers} />
         <WorkersAddForm newWorkers={this.addWorkers} />
       </div>
     );
